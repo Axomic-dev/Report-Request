@@ -4,7 +4,7 @@ export async function messageHandler(req: Req, res: Res) {
   try {
     const rawData = Buffer.from(req.body.message.data, 'base64');
     const message = JSON.parse(rawData.toString('utf-8'));
-    console.info(`Report stored succesfully on ${message}!`);
+    console.info(message);
   } catch (error) {
     console.error(error);
   }
