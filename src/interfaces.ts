@@ -1,6 +1,18 @@
-import { Action, DocumentTier } from './boufin';
+import { Action, DocumentTier, EntityId } from './boufin';
 
 export type AnyObject = Record<string, unknown> | Record<string, never>;
+
+interface BoufinData {
+  username: string;
+  entityId: EntityId;
+  data: AnyObject;
+}
+
+export interface BoufinResponse {
+  taskStatusCode: number;
+  taskStatus: string;
+  results: BoufinData | Record<string, never>;
+}
 
 export interface BoufinRequest {
   request: string;

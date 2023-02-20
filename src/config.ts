@@ -24,6 +24,8 @@ export const IS_BETA = NODE_ENV === 'beta';
 export const IS_PRODUCTION = NODE_ENV === 'production';
 export const IS_TEST = NODE_ENV === 'test';
 export const PORT = process.env.PORT || '8080';
+export const API_KEY = getEnv('API_KEY');
+export const API_URL = getEnv('API_URL');
 
 // GCP Function variables
 export const GCP_PROJECT = getEnv('GCP_PROJECT');
