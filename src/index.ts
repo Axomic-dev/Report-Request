@@ -14,22 +14,22 @@ export async function messageHandler(req: Req, res: Res) {
     if (!token) {
       throw new Error('[Boufin] Failed when login into Boufin API');
     }
-    const requests: Record<Action, string> = {};
-    let nextJob = {};
-    for (nextJob in jobs) {
-      const executionId = await task(nextJob as BoufinRequest, token);
-      const executionAction = (nextJob as BoufinRequest).action.split(':')[0];
-      if (executionId) {
-        requests[executionAction] = executionId;
-      }
-    }
-    const lastExecution = (nextJob as BoufinRequest).action.split(':')[0];
-    let boufinResult: BoufinResponse;
-    do {
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      boufinResult = await check(token, requests[lastExecution]);
-    } while (boufinResult?.taskStatusCode != 200);
-    await publish({ docId, tier, token, requests });
+    // const requests: Record<Action, string> = {};
+    // let nextJob = {};
+    // for (nextJob in jobs) {
+    //   const executionId = await task(nextJob as BoufinRequest, token);
+    //   const executionAction = (nextJob as BoufinRequest).action.split(':')[0];
+    //   if (executionId) {
+    //     requests[executionAction] = executionId;
+    //   }
+    // }
+    // const lastExecution = (nextJob as BoufinRequest).action.split(':')[0];
+    // let boufinResult: BoufinResponse;
+    // do {
+    //   await new Promise((resolve) => setTimeout(resolve, 200));
+    //   boufinResult = await check(token, requests[lastExecution]);
+    // } while (boufinResult?.taskStatusCode != 200);
+    // await publish({ docId, tier, token, requests });
     res.status(200).end();
   } catch (error) {
     console.error(error);
