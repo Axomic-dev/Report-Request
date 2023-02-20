@@ -14,6 +14,7 @@ export async function messageHandler(req: Req, res: Res) {
     if (!token) {
       throw new Error('[Boufin] Failed when login into Boufin API');
     }
+    console.info(token);
     // const requests: Record<Action, string> = {};
     // let nextJob = {};
     // for (nextJob in jobs) {
