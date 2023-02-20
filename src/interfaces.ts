@@ -15,7 +15,7 @@ export interface BoufinResponse {
 }
 
 export interface BoufinRequest {
-  request: string;
+  action: string;
   username: string;
   password: string;
 }

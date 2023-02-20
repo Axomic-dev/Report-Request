@@ -13,9 +13,9 @@ export async function publish(data: PubsubMessage) {
       .then((messageId) => {
         console.info(`[Pub/Sub] Message with ID ${messageId} has been published`);
       });
-    return data.docId;
+    return true;
   } catch (error) {
     console.error(`[Pub/Sub] Received error while publishing: ${error}`);
-    return '';
+    return false;
   }
 }

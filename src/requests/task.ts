@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { API_URL } from '../config';
+import { BoufinRequest } from '../interfaces';
 
-export default async function (action: string, username: string, password: string, token: string) {
+export default async function (job: BoufinRequest, token: string) {
+  const { action, username, password } = job;
   const data = JSON.stringify({
     action,
     args: {
