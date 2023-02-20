@@ -4,13 +4,6 @@ import { BoufinRequest } from '../interfaces';
 
 export default async function (job: BoufinRequest, token: string) {
   const { action, username, password } = job;
-  const data = JSON.stringify({
-    action,
-    args: {
-      username,
-      password
-    }
-  });
   const config = {
     method: 'post',
     maxBodyLength: Infinity,
@@ -18,7 +11,13 @@ export default async function (job: BoufinRequest, token: string) {
     headers: {
       Authorization: `Bearer ${token}`
     },
-    data
+    body: {
+      action,
+      args: {
+        username,
+        password
+      }
+    }
   };
 
   return await axios(config)
