@@ -24,13 +24,13 @@ export async function messageHandler(req: Req, res: Res) {
       }
     }
     console.info(JSON.stringify(requests));
-    // const lastExecution = (nextJob as BoufinRequest).action.split(':')[0];
-    // let boufinResult: BoufinResponse;
-    // do {
-    //   await new Promise((resolve) => setTimeout(resolve, 200));
-    //   boufinResult = await check(token, requests[lastExecution]);
-    // } while (boufinResult?.taskStatusCode != 200);
-    // await publish({ docId, tier, token, requests });
+    const lastExecution = (nextJob as BoufinRequest).action.split(':')[0];
+    let boufinResult: BoufinResponse;
+    do {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      boufinResult = await check(token, requests[lastExecution]);
+    } while (boufinResult?.taskStatusCode != 200);
+    await publish({ docId, tier, token, requests });
     res.status(200).end();
   } catch (error) {
     console.error(error);
