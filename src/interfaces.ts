@@ -1,0 +1,22 @@
+import { Action, DocumentTier } from './boufin';
+
+export type AnyObject = Record<string, unknown> | Record<string, never>;
+
+export interface BoufinRequest {
+  request: string;
+  username: string;
+  password: string;
+}
+
+export interface PubsubRequest {
+  docId: string;
+  tier: DocumentTier;
+  jobs: Array<BoufinRequest>;
+}
+
+export interface PubsubMessage {
+  docId: string;
+  token: string;
+  tier: DocumentTier;
+  requests: Record<Action, string>;
+}
