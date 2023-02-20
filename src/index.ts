@@ -1,6 +1,6 @@
 import { Request as Req, Response as Res } from 'express';
 
-export async function messageHandler(req: Req, res: Res) {
+export function messageHandler(req: Req, res: Res) {
   try {
     const rawData = Buffer.from(req.body.message.data, 'base64').toString('utf-8');
     const message = JSON.parse(rawData);
