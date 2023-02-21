@@ -11,7 +11,7 @@ export default async function (job: BoufinRequest, token: string) {
     headers: {
       Authorization: `Bearer ${token}`
     },
-    body: {
+    data: {
       action,
       args: {
         username,
