@@ -16,15 +16,17 @@ export async function messageHandler(req: Req, res: Res) {
     }
     const requests: Record<Action, string> = {};
     let nextJob: any;
+    const actions: Array<string> = [];
     console.info('Succesfully logged in. Starting bots from API...');
     for (nextJob in jobs) {
       const executionId = await task(nextJob as BoufinRequest, token);
       const executionAction = (nextJob as BoufinRequest)?.action?.split(':')[0];
       if (executionId) {
+        actions.push(executionId);
         requests[executionAction] = executionId;
       }
     }
-    const lastExecution = requests[(nextJob as BoufinRequest)?.action?.split(':')[0]];
+    const lastExecution = actions[actions.length - 1];
     console.info(`Bots started. Waiting task with ID ${lastExecution} to end`);
     // let boufinResult: BoufinResponse;
     // do {
