@@ -16,6 +16,7 @@ export async function messageHandler(req: Req, res: Res) {
     }
     const requests: Record<Action, string> = {};
     let nextJob = {};
+    console.info('Succesfully logged in. Starting bots from API...');
     for (nextJob in jobs) {
       const executionId = await task(nextJob as BoufinRequest, token);
       const executionAction = (nextJob as BoufinRequest).action.split(':')[0];
@@ -23,11 +24,12 @@ export async function messageHandler(req: Req, res: Res) {
         requests[executionAction] = executionId;
       }
     }
-    const lastExecution = (nextJob as BoufinRequest).action.split(':')[0];
+    const lastExecution = requests[(nextJob as BoufinRequest).action.split(':')[0]];
+    console.info(`Bots started. Waiting task with ID ${lastExecution} to end`);
     let boufinResult: BoufinResponse;
     do {
       await new Promise((resolve) => setTimeout(resolve, 200));
-      boufinResult = await check(token, requests[lastExecution]);
+      boufinResult = await check(token, lastExecution);
     } while (boufinResult?.taskStatusCode != 200);
     await publish({ docId, tier, token, requests });
     res.status(200).end();
