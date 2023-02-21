@@ -1,10 +1,24 @@
 import { Request as Req, Response as Res } from 'express';
-import { PubsubRequest, BoufinRequest, BoufinResponse } from './interfaces';
+import { PubsubRequest, BoufinResponse } from './interfaces';
 import login from './requests/login';
 import task from './requests/task';
 import check from './requests/check';
 import { publish } from './pubsub';
 import { Action } from './boufin';
+
+async function waitTask(taskId: string, token: string, timeout: number) {
+  const startTime = new Date().getTime();
+  let boufinResult: BoufinResponse;
+  do {
+    const now = new Date().getTime();
+    if (now - startTime >= timeout) {
+      return false;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    boufinResult = await check(token, taskId);
+  } while (boufinResult.taskStatusCode != 200);
+  return true;
+}
 
 export async function messageHandler(req: Req, res: Res) {
   try {
@@ -27,12 +41,12 @@ export async function messageHandler(req: Req, res: Res) {
     }
     const lastExecution = actions[actions.length - 1];
     console.info(`Bots started. Waiting task with ID ${lastExecution} to end`);
-    // let boufinResult: BoufinResponse;
-    // do {
-    //   await new Promise((resolve) => setTimeout(resolve, 200));
-    //   boufinResult = await check(token, lastExecution);
-    // } while (boufinResult?.taskStatusCode != 200);
-    // await publish({ docId, tier, token, requests });
+    const success = await waitTask(lastExecution, token, 10000);
+    if (success) {
+      await publish({ docId, tier, token, requests });
+    } else {
+      throw new Error('[Boufin] Timeout reached, check if bots are running');
+    }
     res.status(200).end();
   } catch (error) {
     console.error(error);
