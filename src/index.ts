@@ -14,7 +14,7 @@ async function waitTask(taskId: string, token: string, timeout: number) {
     if (now - startTime >= timeout) {
       return false;
     }
-    await new Promise((resolve) => setTimeout(resolve, 400));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     boufinResult = await check(token, taskId);
   } while (boufinResult.taskStatusCode != 200);
   return true;
@@ -41,7 +41,7 @@ export async function messageHandler(req: Req, res: Res) {
     }
     const lastExecution = actions[actions.length - 1];
     console.info(`Bots started. Waiting task with ID ${lastExecution} to end`);
-    const success = await waitTask(lastExecution, token, 10000);
+    const success = await waitTask(lastExecution, token, 30000);
     if (success) {
       await publish({ docId, tier, token, requests });
     } else {
