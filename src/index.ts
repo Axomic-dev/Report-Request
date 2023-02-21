@@ -15,12 +15,11 @@ export async function messageHandler(req: Req, res: Res) {
       throw new Error('[Boufin] Failed when login into Boufin API');
     }
     const requests: Record<Action, string> = {};
-    let nextJob: any;
     const actions: Array<string> = [];
     console.info('Succesfully logged in. Starting bots from API...');
-    for (nextJob in jobs) {
-      const executionId = await task(nextJob as BoufinRequest, token);
-      const executionAction = (nextJob as BoufinRequest)?.action?.split(':')[0];
+    for (const job of jobs) {
+      const executionId = await task(job, token);
+      const executionAction = job.action.split(':')[0];
       if (executionId) {
         actions.push(executionId);
         requests[executionAction] = executionId;
