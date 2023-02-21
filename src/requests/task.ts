@@ -9,15 +9,16 @@ export default async function (job: BoufinRequest, token: string) {
     maxBodyLength: Infinity,
     url: `${API_URL}api/v1/tasks`,
     headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`
     },
-    data: {
+    data: JSON.stringify({
       action,
       args: {
         username,
         password
       }
-    }
+    })
   };
 
   return await axios(config)
