@@ -26,12 +26,12 @@ export async function messageHandler(req: Req, res: Res) {
     }
     const lastExecution = requests[(nextJob as BoufinRequest)?.action?.split(':')[0]];
     console.info(`Bots started. Waiting task with ID ${lastExecution} to end`);
-    let boufinResult: BoufinResponse;
-    do {
-      await new Promise((resolve) => setTimeout(resolve, 200));
-      boufinResult = await check(token, lastExecution);
-    } while (boufinResult?.taskStatusCode != 200);
-    await publish({ docId, tier, token, requests });
+    // let boufinResult: BoufinResponse;
+    // do {
+    //   await new Promise((resolve) => setTimeout(resolve, 200));
+    //   boufinResult = await check(token, lastExecution);
+    // } while (boufinResult?.taskStatusCode != 200);
+    // await publish({ docId, tier, token, requests });
     res.status(200).end();
   } catch (error) {
     console.error(error);
