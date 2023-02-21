@@ -33,7 +33,7 @@ export async function messageHandler(req: Req, res: Res) {
     console.info('Succesfully logged in. Starting bots from API...');
     for (const job of jobs) {
       const executionId = await task(job, token);
-      const executionAction = job.action.split(':')[0];
+      const executionAction = job.action.split(':')[1];
       if (executionId) {
         actions.push(executionId);
         requests[executionAction] = executionId;
