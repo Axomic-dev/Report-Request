@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { API_URL, API_KEY } from '../config';
 
-export default async function () {
+export default async function login() {
   const config = {
     method: 'post',
     maxBodyLength: Infinity,

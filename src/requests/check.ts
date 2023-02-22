@@ -8,7 +8,7 @@ const fail: BoufinResponse = {
   results: Object()
 };
 
-export default async function (token: string, taskId: string) {
+async function check(token: string, taskId: string) {
   const config = {
     method: 'get',
     url: `${API_URL}api/v1/tasks/${taskId}`,
@@ -24,4 +24,18 @@ export default async function (token: string, taskId: string) {
     console.error(error);
     return fail;
   }
+}
+
+export default async function waitTask(taskId: string, token: string, timeout: number) {
+  const startTime = new Date().getTime();
+  let boufinResult: BoufinResponse;
+  do {
+    const now = new Date().getTime();
+    if (now - startTime >= timeout) {
+      return false;
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    boufinResult = await check(token, taskId);
+  } while (boufinResult.taskStatusCode != 200);
+  return true;
 }

@@ -1,24 +1,10 @@
 import { Request as Req, Response as Res } from 'express';
-import { PubsubRequest, BoufinResponse } from './interfaces';
+import { PubsubRequest } from './interfaces';
 import login from './requests/login';
 import task from './requests/task';
-import check from './requests/check';
+import waitTask from './requests/check';
 import { publish } from './pubsub';
 import { Action } from './boufin';
-
-async function waitTask(taskId: string, token: string, timeout: number) {
-  const startTime = new Date().getTime();
-  let boufinResult: BoufinResponse;
-  do {
-    const now = new Date().getTime();
-    if (now - startTime >= timeout) {
-      return false;
-    }
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    boufinResult = await check(token, taskId);
-  } while (boufinResult.taskStatusCode != 200);
-  return true;
-}
 
 export async function messageHandler(req: Req, res: Res) {
   try {
