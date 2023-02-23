@@ -27,15 +27,11 @@ async function check(token: string, taskId: string) {
 }
 
 export default async function waitTask(taskId: string, token: string, timeout: number) {
-  const startTime = new Date().getTime();
-  let boufinResult: BoufinResponse;
-  do {
-    const now = new Date().getTime();
-    if (now - startTime >= timeout) {
-      return false;
-    }
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    boufinResult = await check(token, taskId);
-  } while (boufinResult.taskStatusCode != 200);
-  return true;
+  await new Promise((resolve) => setTimeout(resolve, 10000));
+  for (let time = 10000; time < timeout; time += 3000) {
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+    const boufinResult = await check(token, taskId);
+    if (boufinResult.taskStatusCode == 200) break;
+  }
+  return false;
 }

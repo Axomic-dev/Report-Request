@@ -27,7 +27,7 @@ export async function messageHandler(req: Req, res: Res) {
     }
     const lastExecution = actions[actions.length - 1];
     console.info(`Bots started. Waiting task with ID ${lastExecution} to end`);
-    const success = await waitTask(lastExecution, token, 30000);
+    const success = await waitTask(lastExecution, token, 120000);
     if (success) {
       await publish({ docId, tier, token, requests });
     } else {
