@@ -31,7 +31,9 @@ export default async function waitTask(taskId: string, token: string, timeout: n
   for (let time = 10000; time < timeout; time += 3000) {
     await new Promise((resolve) => setTimeout(resolve, 3000));
     const boufinResult = await check(token, taskId);
-    if (boufinResult.taskStatusCode == 200) break;
+    if (boufinResult.taskStatusCode == 200) {
+      return true;
+    }
   }
   return false;
 }
